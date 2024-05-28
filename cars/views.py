@@ -42,3 +42,27 @@ class DetailCarsApiView(APIView):
             'status_code': status.HTTP_200_OK
         }
         return Response(serializer_data)
+
+
+class DeleteCarsView(APIView):
+    def delete(self, request, pk):
+        cars = Cars.objects.get(pk=pk)
+        cars.delete()
+        return Response("Car is  Deleted")
+
+
+class UpdateCarsView(APIView):
+    def put(self, request, pk):
+        car = Cars.objects.get(pk=pk)
+        serializer = CarsSerializer(instance=car, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+
+class CreateCarView(APIView):
+    def post(self, request):
+        serializer = CarsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
